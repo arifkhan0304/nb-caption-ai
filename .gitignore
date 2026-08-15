@@ -1,0 +1,38 @@
+# Python
+backend/venv/
+backend/__pycache__/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+
+# Backend runtime data — created automatically, shouldn't be committed
+backend/projects/*.json
+backend/uploads/*
+backend/exports/*
+backend/models/*
+backend/temp/*
+backend/logs/*
+backend/custom_styles/*.json
+!backend/projects/.gitkeep
+!backend/uploads/.gitkeep
+!backend/exports/.gitkeep
+!backend/models/.gitkeep
+!backend/temp/.gitkeep
+!backend/logs/.gitkeep
+!backend/custom_styles/.gitkeep
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
+frontend/.env.local
+
+# Env files with real secrets
+.env
+*.env.local
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/

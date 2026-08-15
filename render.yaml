@@ -1,0 +1,40 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+#
+# Deploy: push this repo to GitHub, then in the Render dashboard choose
+# "New +" -> "Blueprint" and point it at your repo. Render reads this file
+# and creates both services automatically.
+#
+# NOTE: Render's standard web services are CPU-only. Transcription will work
+# but will be slower than a GPU box, especially with the `large` model —
+# fine for personal/occasional use, not for serving many concurrent users.
+# For GPU-backed hosting, use a provider like RunPod/Lambda/Paperspace for
+# the backend service instead, and only deploy the frontend here.
+
+services:
+  - type: web
+    name: nb-caption-ai-backend
+    runtime: docker
+    dockerfilePath: ./docker/Dockerfile.backend
+    dockerContext: ./backend
+    plan: standard # transcription needs real CPU/RAM — avoid the free tier
+    envVars:
+      - key: DEVICE
+        value: cpu
+      - key: APP_PASSWORD
+        sync: false # set this in the Render dashboard — keep it secret
+      - key: FRONTEND_ORIGIN
+        value: https://nb-caption-ai-frontend.onrender.com
+    disk:
+      name: nb-caption-ai-data
+      mountPath: /app
+      sizeGB: 20 # holds uploaded videos, exports, and downloaded model weights
+
+  - type: web
+    name: nb-caption-ai-frontend
+    runtime: docker
+    dockerfilePath: ./docker/Dockerfile.frontend
+    dockerContext: ./frontend
+    plan: starter
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://nb-caption-ai-backend.onrender.com
